@@ -6,12 +6,10 @@ const VISION_URL =
     process.env?.NEXT_PUBLIC_MODEL_SERVER_URL) ||
   "https://abdulrhmanhelmy-plant-disease-inference-api.hf.space/predict";
 
-// "Tomato___Late_blight" → "Tomato - Late blight"
 function formatLabel(label = "") {
   return label.replace(/___/g, " - ").replace(/_/g, " ");
 }
 
-// Build Arabic RAG prompt from the predicted label
 function buildDiseasePrompt(label) {
   const formatted = formatLabel(label);
   return `تم تشخيص النبات بمرض وجاوب بالعربي بس "${formatted}". ما هي أعراض هذا المرض وكيف يمكن علاجه؟`;
@@ -37,10 +35,6 @@ const CHIPS = [
     text: "¿Cómo tratar el tizón tardío de la papa?",
   },
 ];
-
-function escapeHtml(t) {
-  return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
 
 function formatText(text) {
   return text
@@ -121,7 +115,7 @@ function TypewriterBubble({ text, sources }) {
     }
     timer = setTimeout(tick, 8);
     return () => clearTimeout(timer);
-  }, [text]);
+  }, [text, chars]);
 
   return (
     <div style={styles.aiBubble}>
@@ -165,7 +159,6 @@ function Message({ msg }) {
       </div>
     );
   }
-  // Diagnosis card (vision model result)
   if (msg.role === "diagnosis") {
     return (
       <div style={styles.msgRow}>
@@ -203,7 +196,7 @@ export default function AgriRAG() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [history, setHistory] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null); // { file, preview }
+  const [selectedImage, setSelectedImage] = useState(null);
   const chatRef = useRef(null);
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -273,17 +266,15 @@ export default function AgriRAG() {
     e.target.value = "";
   };
 
-  const removeImage = () => {
+  const removeImage = useCallback(() => {
     if (selectedImage) URL.revokeObjectURL(selectedImage.preview);
     setSelectedImage(null);
-  };
+  }, [selectedImage]);
 
-  // ── Send image: vision model → RAG ──────────────────────────────────────────
   const sendImageMessage = useCallback(async () => {
     if (!selectedImage || busy) return;
     setBusy(true);
 
-    // 1. Show user message with the image thumbnail
     const userContent = "🖼 تحليل صورة النبات...";
     setMessages((prev) => [
       ...prev,
@@ -295,7 +286,6 @@ export default function AgriRAG() {
     removeImage();
 
     try {
-      // ── Step 1: Send image to vision/classification model ──────────────────
       const formData = new FormData();
       formData.append("file", imageFile);
 
@@ -309,7 +299,6 @@ export default function AgriRAG() {
       });
 
       if (!visionRes.ok) {
-        // fallback mock for demo
         if (visionRes.status === 403 || visionRes.status >= 500) {
           label = "Tomato___Late_blight";
           confidence = 0.9741;
@@ -328,8 +317,9 @@ export default function AgriRAG() {
             : visionData.confidence || 0;
       }
 
-      // ── Step 2: Show diagnosis result as a system message ─────────────────
-      const diagnosisNote = `🔬 **نتيجة التشخيص:** ${formatLabel(label)}\n📊 **الثقة:** ${(confidence * 100).toFixed(1)}%`;
+      const diagnosisNote = `🔬 **نتيجة التشخيص:** ${formatLabel(
+        label,
+      )}\n📊 **الثقة:** ${(confidence * 100).toFixed(1)}%`;
 
       setMessages((prev) => [
         ...prev.filter((m) => m.role !== "typing"),
@@ -337,7 +327,6 @@ export default function AgriRAG() {
         { role: "typing", typingText: "جاري البحث عن الأعراض والعلاج..." },
       ]);
 
-      // ── Step 3: Ask RAG about symptoms & treatment ────────────────────────
       const ragQuestion = buildDiseasePrompt(label);
       const newHistory = [...history, { role: "user", content: ragQuestion }];
 
@@ -373,7 +362,7 @@ export default function AgriRAG() {
       setBusy(false);
       setTimeout(() => inputRef.current?.focus(), 50);
     }
-  }, [selectedImage, busy, history]);
+  }, [selectedImage, busy, history, removeImage]);
 
   const isEmpty = messages.length === 0;
 
@@ -544,7 +533,6 @@ export default function AgriRAG() {
     </>
   );
 }
-
 // ─── Inline styles ────────────────────────────────────────────────────────────
 const G = {
   bg: "#0d1117",
