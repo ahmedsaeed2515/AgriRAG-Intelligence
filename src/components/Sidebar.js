@@ -1,11 +1,34 @@
 import React from "react";
 import { chatStyles as styles, G } from "../utils/styles";
 
-export default function Sidebar({ messages, resetChat }) {
-  const userMessages = messages.filter((m) => m.role === "user");
+export default function Sidebar({ messages, resetChat, isOpen, onClose }) {
+  const userMessages = messages.filter((m) => m.role === "user").reverse();
 
   return (
-    <div style={styles.sidebar}>
+    <div style={styles.sidebar} className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
+      {/* Close button — mobile only */}
+      <button
+        className="sidebar-close-btn"
+        onClick={onClose}
+        style={{
+          display: "none",
+          position: "absolute",
+          top: 14,
+          left: 14,
+          background: "transparent",
+          border: "none",
+          color: G.muted,
+          cursor: "pointer",
+          padding: 6,
+          borderRadius: 6,
+        }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
       {/* Logo */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "0 4px" }}>
         <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg,#16a34a,#15803d)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 10px rgba(22,163,74,0.3)" }}>

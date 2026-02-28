@@ -41,6 +41,7 @@ export const chatStyles = {
     flexShrink: 0,
     zIndex: 10,
     borderLeft: `1px solid ${G.border}`,
+    position: "relative",   // allows mobile fixed override to take effect
   },
   logoWrap: { marginBottom: 24, padding: "10px" },
   logoText: {
@@ -201,11 +202,11 @@ export const chatStyles = {
 
   // User message bubble — styled pill
   userBubble: {
-    padding: "13px 18px",
+    padding: "12px 16px",
     borderRadius: "20px 6px 20px 20px",
     fontSize: 15,
     lineHeight: 1.65,
-    maxWidth: "70%",
+    maxWidth: "80%",  // slightly wider on mobile
     background: "linear-gradient(135deg, #1a3d23, #162d1b)",
     color: "#d1fae5",
     border: "1px solid rgba(22,163,74,0.25)",
@@ -337,47 +338,53 @@ export const chatStyles = {
     border: `1px solid rgba(22,163,74,0.3)`,
   },
   welcomeTitle: {
-    fontSize: 30,
+    fontSize: 26,              // slightly smaller for mobile
     fontWeight: "700",
     color: "#d1fae5",
     letterSpacing: -0.5,
+    textAlign: "center",
   },
   welcomeSub: {
-    fontSize: 15,
+    fontSize: 14,
     color: G.muted,
-    maxWidth: 480,
+    maxWidth: 420,
     lineHeight: 1.75,
+    textAlign: "center",
+    padding: "0 8px",
   },
 
   // ===== FOOTER / INPUT BAR =====
   footer: {
-    padding: "14px 20px 28px",
-    background: "rgba(13,26,16,0.85)",
+    padding: "14px 16px 28px",
+    background: "rgba(13,26,16,0.92)",
     backdropFilter: "blur(12px)",
     borderTop: `1px solid ${G.border}`,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    flexShrink: 0,
   },
   chipsRow: {
     display: "flex",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 14,
+    marginBottom: 12,
     maxWidth: 780,
     justifyContent: "center",
     width: "100%",
+    overflowX: "auto",
+    WebkitOverflowScrolling: "touch",
   },
   inputWrap: {
     width: "100%",
     maxWidth: 780,
     background: G.surface,
     border: `1px solid ${G.border}`,
-    borderRadius: 24,
+    borderRadius: 20,
     display: "flex",
     flexDirection: "column",
     alignItems: "stretch",
-    padding: "12px 16px",
+    padding: "10px 14px",
     transition: "all 0.25s",
     boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
   },

@@ -249,15 +249,77 @@ body {
   color: #86efac;
 }
 
-/* ===== Responsive ===== */
+/* ===== Responsive / Mobile ===== */
 @media (max-width: 768px) {
+
+  /* Sidebar: off-canvas drawer (slides in from right for RTL) */
   .sidebar {
-    display: none !important;
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px !important;
+    z-index: 1000;
+    transform: translateX(110%);
+    transition: transform 0.3s cubic-bezier(.22,.61,.36,1);
+    box-shadow: -8px 0 40px rgba(0,0,0,0.7);
+    overflow-y: auto;
   }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* Hamburger button — show on mobile */
+  .menu-btn {
+    display: flex !important;
+  }
+
+  /* Close button inside sidebar — show on mobile */
+  .sidebar-close-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dark overlay behind open sidebar */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    animation: fadeIn 0.25s ease;
+  }
+
+  /* Chips — smaller, scrollable horizontal on very small screens */
+  .chip {
+    font-size: 12px !important;
+    padding: 7px 12px !important;
+    white-space: nowrap;
+  }
+
+  /* Make chips row horizontally scrollable on small screens */
+  .chips-row-mobile {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  /* Message rows — tighter on small screen */
   .msg-row {
-    padding: 0 16px;
+    padding: 0 8px;
   }
-  .inputWrap {
-    margin: 0 16px;
+}
+
+/* iPhone notch / safe areas */
+@supports (padding: max(0px)) {
+  .footer-safe {
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

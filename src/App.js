@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useChat } from "./hooks/useChat";
 import { chatStyles as styles } from "./utils/styles";
 
@@ -27,21 +27,42 @@ export default function AgriRAG() {
     regenerateLast
   } = useChat();
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const isEmpty = messages.length === 0;
 
   return (
     <>
+      {/* Mobile overlay — tap outside sidebar to close */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <div style={styles.body}>
-        <Sidebar messages={messages} resetChat={resetChat} />
+        <Sidebar
+          messages={messages}
+          resetChat={resetChat}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
 
         <div style={styles.main}>
-          <ChatHeader />
+          <ChatHeader onMenuClick={() => setSidebarOpen(prev => !prev)} />
 
           <div style={styles.chatWindow} ref={chatRef}>
             {isEmpty ? (
               <WelcomeScreen />
             ) : (
-              messages.map((msg, i) => <Message key={i} msg={msg} isLast={i === messages.length - 1} onRegenerate={regenerateLast} />)
+              messages.map((msg, i) => (
+                <Message
+                  key={i}
+                  msg={msg}
+                  isLast={i === messages.length - 1}
+                  onRegenerate={regenerateLast}
+                />
+              ))
             )}
           </div>
 
