@@ -39,8 +39,16 @@ export function getSourceClass(src) {
 }
 
 export const CHIPS = [
-  { flag: "🔍", label: "تشخيص مرض", text: "هل يمكنك مساعدة في تحديد نوع هذا المرض النباتي من خلال الصورة وعلامات الإصابة؟" },
+  // Arabic (Current & New)
+  { flag: "🔍", label: "تشخيص مرض", text: "هل يمكنك مساعدة في تحديد نوع هذا المرض النباتي من العلامات والأعراض الظاهرة؟" },
   { flag: "🌿", label: "برنامج تسميد", text: "ما هي أفضل المعايير لجدولة برنامج التسميد بالنيتروجين لمحصول القمح؟" },
   { flag: "💧", label: "تحسين الري", text: "كيف يمكنني تحسين كفاءة الري وتقليل استهلاك المياه لمحصول الطماطم؟" },
   { flag: "📊", label: "تحليل إنتاجية", text: "أعطني أهم 5 ممارسات حديثة لزيادة المحصول وتقليل الفاقد في الحصاد." },
+  { flag: "🐛", label: "مكافحة الآفات", text: "كيف يمكنني مكافحة حشرة المن والذبابة البيضاء بأقل استخدام للمبيدات الكيميائية؟" },
+  { flag: "🌍", label: "التغير المناخي", text: "ما هي الحلول والتوصيات لمواجهة تأثير التغير المناخي والحرارة الشديدة على المحاصيل؟" },
+
+  // English
+  { flag: "🌾", label: "Crop Yield", text: "What are the best modern agricultural practices to maximize corn crop yield?" },
+  { flag: "🍂", label: "Plant Disease", text: "Can you help identify plant diseases based on yellowing leaf symptoms and dark spots?" },
+  { flag: "🌦️", label: "Weather Impact", text: "How does unexpected heavy rainfall affect newly planted cotton seeds?" },
 ];

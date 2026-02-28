@@ -143,7 +143,7 @@ export const chatStyles = {
   chatWindow: {
     flex: 1,
     overflowY: "auto",
-    padding: "88px 24px 48px",
+    padding: "72px 14px 24px",
     display: "flex",
     flexDirection: "column",
     gap: 0,            // we'll use margin-bottom per row instead
@@ -355,7 +355,7 @@ export const chatStyles = {
 
   // ===== FOOTER / INPUT BAR =====
   footer: {
-    padding: "14px 16px 28px",
+    padding: "10px 12px 16px",
     background: "rgba(13,26,16,0.92)",
     backdropFilter: "blur(12px)",
     borderTop: `1px solid ${G.border}`,
@@ -384,7 +384,7 @@ export const chatStyles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "stretch",
-    padding: "10px 14px",
+    padding: "8px 12px",
     transition: "all 0.25s",
     boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
   },

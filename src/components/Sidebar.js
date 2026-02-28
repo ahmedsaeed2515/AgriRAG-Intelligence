@@ -30,16 +30,23 @@ export default function Sidebar({ messages, resetChat, isOpen, onClose }) {
       </button>
 
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24, padding: "0 4px" }}>
-        <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg,#16a34a,#15803d)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 10px rgba(22,163,74,0.3)" }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-          </svg>
-        </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28, padding: "0 4px" }}>
+        <img 
+          src="/logo.png" 
+          alt="AgriRAG Logo" 
+          style={{ 
+            width: 38, 
+            height: 38, 
+            borderRadius: 12, 
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+            border: "1px solid rgba(22,163,74,0.3)"
+          }} 
+        />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#d1fae5" }}><span style={{ color: G.green }}>Agri</span>RAG</div>
-          <div style={{ fontSize: 10, color: G.muted }}>Agricultural Intelligence</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#d1fae5", letterSpacing: -0.2 }}>
+            <span style={{ color: G.green }}>Agri</span>RAG
+          </div>
+          <div style={{ fontSize: 10, color: G.muted, fontWeight: 500, opacity: 0.8 }}>Intelligence Pro</div>
         </div>
       </div>
 

@@ -30,8 +30,8 @@ export default function ChatFooter({
   const isSendDisabled = (!input.trim() && !selectedImage) || busy;
 
   return (
-    <div style={styles.footer}>
-      <div style={styles.chipsRow}>
+    <div style={styles.footer} className="chat-footer">
+      <div style={styles.chipsRow} className="chips-row chips-row-mobile">
         {CHIPS.map((c) => (
           <button
             key={c.label}
@@ -54,7 +54,7 @@ export default function ChatFooter({
         ))}
       </div>
 
-      <div style={{ ...styles.inputWrap, flexDirection: "column", alignItems: "stretch", padding: "10px 14px", transition: "all 0.3s" }} className="input-focus-wrap">
+      <div style={{ ...styles.inputWrap, flexDirection: "column", alignItems: "stretch", padding: "8px 12px", transition: "all 0.3s" }} className="input-focus-wrap">
         
         {selectedImage && (
           <div style={{ position: "relative", display: "inline-flex", marginBottom: 10, alignSelf: "flex-start", borderRadius: 10, overflow: "hidden", border: `2px solid ${styles.inputWrap.borderColor || "#d29922"}` }}>
@@ -108,7 +108,7 @@ export default function ChatFooter({
             <button
               style={{
                 ...styles.uploadBtn,
-                width: 38, height: 38, fontSize: 18,
+                width: 32, height: 32, fontSize: 16,
                 ...(selectedImage ? styles.uploadBtnActive : {}),
               }}
               onClick={() => fileInputRef.current?.click()}
@@ -121,7 +121,7 @@ export default function ChatFooter({
             <button
               style={{
                 ...styles.sendBtn,
-                width: 38, height: 38, fontSize: 18,
+                width: 32, height: 32, fontSize: 16,
                 ...(isSendDisabled ? styles.sendBtnDisabled : {}),
               }}
               onClick={() => sendMessage()}
@@ -133,7 +133,7 @@ export default function ChatFooter({
           </div>
         </div>
       </div>
-      <div style={styles.footerNote}>
+      <div style={styles.footerNote} className="footer-note">
         نظام تجريبي مدعوم بالذكاء الاصطناعي — معلومات النظام قد تكون غير دقيقة أحياناً.
       </div>
     </div>

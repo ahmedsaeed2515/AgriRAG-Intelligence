@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useChat } from "./hooks/useChat";
 import { chatStyles as styles } from "./utils/styles";
 
@@ -28,6 +28,26 @@ export default function AgriRAG() {
   } = useChat();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
+
+  const handleScroll = () => {
+    if (!chatRef.current) return;
+    const currentScrollY = chatRef.current.scrollTop;
+    
+    // Prevent jittering
+    if (Math.abs(currentScrollY - lastScrollY.current) < 15) return;
+
+    if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+      // Scrolling down -> hide header
+      setShowHeader(false);
+    } else {
+      // Scrolling up -> show header
+      setShowHeader(true);
+    }
+    lastScrollY.current = currentScrollY;
+  };
+
   const isEmpty = messages.length === 0;
 
   return (
@@ -49,9 +69,14 @@ export default function AgriRAG() {
         />
 
         <div style={styles.main}>
-          <ChatHeader onMenuClick={() => setSidebarOpen(prev => !prev)} />
+          <ChatHeader onMenuClick={() => setSidebarOpen(prev => !prev)} isVisible={showHeader} />
 
-          <div style={styles.chatWindow} ref={chatRef}>
+          <div 
+            style={styles.chatWindow} 
+            ref={chatRef} 
+            className="chat-window"
+            onScroll={handleScroll}
+          >
             {isEmpty ? (
               <WelcomeScreen />
             ) : (

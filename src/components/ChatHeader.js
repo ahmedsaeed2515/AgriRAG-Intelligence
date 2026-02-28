@@ -1,9 +1,16 @@
 import React from "react";
 import { chatStyles as styles, G } from "../utils/styles";
 
-export default function ChatHeader({ onMenuClick }) {
+export default function ChatHeader({ onMenuClick, isVisible }) {
   return (
-    <div style={styles.chatHeader}>
+    <div 
+      style={{
+        ...styles.chatHeader,
+        transform: isVisible ? "translateY(0)" : "translateY(-100%)",
+        transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)"
+      }} 
+      className="chat-header"
+    >
       {/* Hamburger menu — visible only on mobile via CSS */}
       <button
         className="menu-btn"
@@ -42,10 +49,10 @@ export default function ChatHeader({ onMenuClick }) {
 
       {/* Title */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={styles.headerTitle}>
+        <div style={{ ...styles.headerTitle, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: "1.05rem" }} className="header-title">
           <span style={{ color: "#16a34a", fontWeight: "bold" }}>Agri</span>RAG Intelligence
         </div>
-        <div style={{ color: G.muted, fontSize: 11, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <div className="header-sub" style={{ color: G.muted, fontSize: 11, marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           النظام الزراعي الخبير — رؤية حاسوبية + ذكاء اصطناعي
         </div>
       </div>
@@ -61,7 +68,7 @@ export default function ChatHeader({ onMenuClick }) {
         borderRadius: 8,
         flexShrink: 0,
         whiteSpace: "nowrap",
-      }}>
+      }} className="model-chip">
         RAG Vision
       </div>
     </div>

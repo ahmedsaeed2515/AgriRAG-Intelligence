@@ -44,9 +44,8 @@ export function useChat() {
   }, [messages, busy]);
 
   const removeImage = useCallback(() => {
-    if (selectedImage) URL.revokeObjectURL(selectedImage.preview);
     setSelectedImage(null);
-  }, [selectedImage]);
+  }, []);
 
   const sendMessage = useCallback(
     async (manualQuestion) => {
@@ -192,13 +191,18 @@ export function useChat() {
     [input, busy, history, selectedImage, removeImage]
   );
 
+
+
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const preview = URL.createObjectURL(file);
-    setSelectedImage({ file, preview });
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImage({ file, preview: reader.result });
+      if (inputRef.current) inputRef.current.focus();
+    };
+    reader.readAsDataURL(file);
     e.target.value = "";
-    if (inputRef.current) inputRef.current.focus();
   };
   
   const resetChat = useCallback(() => {
