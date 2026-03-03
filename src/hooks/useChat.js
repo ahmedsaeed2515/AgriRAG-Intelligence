@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { API_URL, VISION_URL } from "../utils/constants";
+import { API_URL, VISION_NEW_URL } from "../utils/constants";
 import { buildDiseasePrompt, formatLabel } from "../utils/helpers";
 
 export function useChat() {
@@ -74,11 +74,12 @@ export function useChat() {
 
           let label = "";
           let confidence = 0;
+          let type = "plant";
+          let message = "";
 
-          const visionRes = await fetch(VISION_URL, {
+          const visionRes = await fetch(VISION_NEW_URL, {
             method: "POST",
             body: formData,
-            headers: { accept: "application/json" },
           });
 
           if (!visionRes.ok) {
@@ -86,42 +87,34 @@ export function useChat() {
             throw new Error(err.error || `خطأ في الاتصال بنموذج الرؤية: ${visionRes.status}`);
           } else {
             const visionData = await visionRes.json();
-            label = visionData.predicted_label || "";
-            confidence =
-              typeof visionData.confidence === "string"
-                ? parseFloat(visionData.confidence.replace("%", "")) / 100
-                : visionData.confidence || 0;
+            
+            if (visionData.success === false) {
+              throw new Error(visionData.error || "حدث خطأ أثناء معالجة الصورة.");
+            }
+
+            label = visionData.disease || "";
+            confidence = typeof visionData.confidence === 'number' ? visionData.confidence / 100 : 0;
+            type = visionData.type || "plant";
+            message = visionData.message || "";
           }
 
-          const diagnosisNote = `🔬 **التشخيص المبدئي:** ${formatLabel(label)}\n📊 **نسبة الثقة:** ${(confidence * 100).toFixed(1)}%`;
-
           setMessages((prev) => [
             ...prev.filter((m) => m.role !== "typing"),
-            { role: "diagnosis", content: diagnosisNote, label, confidence },
-            { role: "typing", typingText: "أقوم الآن بالبحث عن طرق العلاج والتعامل مع الحالة..." },
+            { role: "diagnosis", label, confidence, type, message },
           ]);
 
-          // Contextual prompt combining the visual label and user's specific text
-          const ragQuestion = q ? `قمنا بتشخيص هذه النبتة بمرض ${formatLabel(label)}. إضافة لذلك، المستخدم يسأل: ${q}` : buildDiseasePrompt(label);
+          const ragQuestion = type === "non_plant" 
+            ? `المستخدم أرسل صورة لـ (${label}) وليس لنبات. هل يمكنك توضيح ذلك؟` 
+            : q 
+              ? `قمنا بتشخيص هذه النبتة بمرض ${formatLabel(label)}. إضافة لذلك، المستخدم يسأل: ${q}` 
+              : buildDiseasePrompt(label);
           const newHistory = [...history, { role: "user", content: ragQuestion }];
 
-          const ragRes = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              question: ragQuestion,
-              history: newHistory.slice(-8),
-              top_k: 8,
-            }),
-          });
-
-          const ragData = await ragRes.json();
-          const answer = ragData.answer || "عذراً، لم أتمكن من إيجاد تفاصيل دقيقة حول هذه المشكلة.";
-          const sources = ragData.sources_used || ragData.sources || [];
+          const answer = "مش عاوز اخلص الليمت بتاع الapi كفايه عليك تعرف اسمه اي";
 
           setMessages((prev) => [
             ...prev.filter((m) => m.role !== "typing"),
-            { role: "ai", content: answer, sources, isNew: true },
+            { role: "ai", content: answer, sources: [], isNew: true },
           ]);
           setHistory([...newHistory, { role: "assistant", content: answer }]);
         } catch (err) {

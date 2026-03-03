@@ -1,7 +1,7 @@
 import React from "react";
 import { chatStyles as styles, G } from "../utils/styles";
 
-export default function Sidebar({ messages, resetChat, isOpen, onClose }) {
+export default function Sidebar({ messages, resetChat, isOpen, onClose, onTestModelsClick }) {
   const userMessages = messages.filter((m) => m.role === "user").reverse();
 
   return (
@@ -64,7 +64,7 @@ export default function Sidebar({ messages, resetChat, isOpen, onClose }) {
           borderRadius: 10,
           color: G.greenText,
           cursor: "pointer",
-          marginBottom: 20,
+          marginBottom: 10,
           fontFamily: "'IBM Plex Sans Arabic', sans-serif",
           fontSize: 13,
           fontWeight: 600,
@@ -76,6 +76,38 @@ export default function Sidebar({ messages, resetChat, isOpen, onClose }) {
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
         محادثة جديدة
+      </button>
+
+      {/* Test Models Button */}
+      <button
+        onClick={onTestModelsClick}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "11px 14px",
+          background: "linear-gradient(135deg, rgba(22,163,74,0.15), rgba(21,128,61,0.25))",
+          border: "1px solid rgba(22,163,74,0.4)",
+          borderRadius: 10,
+          color: "#fff",
+          cursor: "pointer",
+          marginBottom: 20,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif",
+          fontSize: 13,
+          fontWeight: 600,
+          transition: "all 0.2s",
+          width: "100%",
+          boxShadow: "0 4px 12px rgba(22,163,74,0.15)",
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.background = "linear-gradient(135deg, rgba(22,163,74,0.25), rgba(21,128,61,0.35))";
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.background = "linear-gradient(135deg, rgba(22,163,74,0.15), rgba(21,128,61,0.25))";
+        }}
+      >
+        <span style={{ fontSize: 16 }}>🔬</span>
+        اختبار الـ CNN Model
       </button>
 
       {/* Chat History */}

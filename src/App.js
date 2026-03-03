@@ -7,6 +7,7 @@ import ChatHeader from "./components/ChatHeader";
 import WelcomeScreen from "./components/WelcomeScreen";
 import Message from "./components/Message";
 import ChatFooter from "./components/ChatFooter";
+import ModelTester from "./components/ModelTester";
 
 import "./styles.css";
 
@@ -27,6 +28,7 @@ export default function AgriRAG() {
     regenerateLast
   } = useChat();
 
+  const [activeView, setActiveView] = useState('chat'); // 'chat' or 'tester'
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
@@ -66,42 +68,49 @@ export default function AgriRAG() {
           resetChat={resetChat}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          onTestModelsClick={() => { setActiveView('tester'); setSidebarOpen(false); }}
         />
 
         <div style={styles.main}>
-          <ChatHeader onMenuClick={() => setSidebarOpen(prev => !prev)} isVisible={showHeader} />
+          {activeView === 'tester' ? (
+            <ModelTester onBack={() => setActiveView('chat')} />
+          ) : (
+            <>
+              <ChatHeader onMenuClick={() => setSidebarOpen(prev => !prev)} isVisible={showHeader} />
 
-          <div 
-            style={styles.chatWindow} 
-            ref={chatRef} 
-            className="chat-window"
-            onScroll={handleScroll}
-          >
-            {isEmpty ? (
-              <WelcomeScreen />
-            ) : (
-              messages.map((msg, i) => (
-                <Message
-                  key={i}
-                  msg={msg}
-                  isLast={i === messages.length - 1}
-                  onRegenerate={regenerateLast}
-                />
-              ))
-            )}
-          </div>
+              <div 
+                style={styles.chatWindow} 
+                ref={chatRef} 
+                className="chat-window"
+                onScroll={handleScroll}
+              >
+                {isEmpty ? (
+                  <WelcomeScreen onTestModelsClick={() => setActiveView('tester')} />
+                ) : (
+                  messages.map((msg, i) => (
+                    <Message
+                      key={i}
+                      msg={msg}
+                      isLast={i === messages.length - 1}
+                      onRegenerate={regenerateLast}
+                    />
+                  ))
+                )}
+              </div>
 
-          <ChatFooter
-            busy={busy}
-            sendMessage={sendMessage}
-            input={input}
-            setInput={setInput}
-            inputRef={inputRef}
-            fileInputRef={fileInputRef}
-            selectedImage={selectedImage}
-            handleImageSelect={handleImageSelect}
-            removeImage={removeImage}
-          />
+              <ChatFooter
+                busy={busy}
+                sendMessage={sendMessage}
+                input={input}
+                setInput={setInput}
+                inputRef={inputRef}
+                fileInputRef={fileInputRef}
+                selectedImage={selectedImage}
+                handleImageSelect={handleImageSelect}
+                removeImage={removeImage}
+              />
+            </>
+          )}
         </div>
       </div>
     </>

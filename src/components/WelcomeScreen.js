@@ -1,7 +1,7 @@
 import React from "react";
 import { chatStyles as styles } from "../utils/styles";
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({ onTestModelsClick }) {
   return (
     <div style={styles.welcomeScreen} className="welcome-anim">
       <div style={{ ...styles.welcomeIcon, background: "transparent", border: "none", width: 100, height: 100, marginBottom: 12 }}>

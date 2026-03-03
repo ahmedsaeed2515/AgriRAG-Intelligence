@@ -185,6 +185,39 @@ export default function Message({ msg, isLast, onRegenerate }) {
     );
   }
   if (msg.role === "diagnosis") {
+    if (msg.type === "non_plant") {
+      return (
+        <div style={styles.msgRow}>
+          <div style={styles.msgInner}>
+            <div style={{ ...styles.avatar, ...styles.aiAv }}>⚠️</div>
+            <div style={{ ...styles.aiBubble, ...styles.diagnosisCard, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)" }}>
+              <div style={{ ...styles.diagnosisLabel, color: "#f59e0b" }}>تنبيه - كائن غير زراعي</div>
+              <div style={styles.diagnosisDisease}>{msg.label}</div>
+              {msg.message && (
+                <div style={{ marginTop: 8, fontSize: 13, color: "#fde68a", lineHeight: 1.5 }}>
+                  {msg.message}
+                </div>
+              )}
+              <div style={styles.diagnosisConf}>
+                <div style={{ ...styles.confBar, background: "rgba(245,158,11,0.2)" }}>
+                  <div
+                    style={{
+                      ...styles.confFill,
+                      background: "#f59e0b",
+                      width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
+                    }}
+                  />
+                </div>
+                <span style={{ ...styles.confText, color: "#fde68a" }}>
+                  {(msg.confidence * 100).toFixed(1)}% ثقة
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div style={styles.msgRow}>
         <div style={styles.msgInner}>
@@ -192,12 +225,17 @@ export default function Message({ msg, isLast, onRegenerate }) {
           <div style={{ ...styles.aiBubble, ...styles.diagnosisCard }}>
             <div style={styles.diagnosisLabel}>نتيجة نموذج الرؤية</div>
             <div style={styles.diagnosisDisease}>{formatLabel(msg.label)}</div>
+            {msg.message && (
+              <div style={{ marginTop: 8, marginBottom: 8, fontSize: 13, color: "#d1fae5", lineHeight: 1.5 }}>
+                ✅ {msg.message}
+              </div>
+            )}
             <div style={styles.diagnosisConf}>
               <div style={{ ...styles.confBar }}>
                 <div
                   style={{
                     ...styles.confFill,
-                    width: `${(msg.confidence * 100).toFixed(0)}%`,
+                    width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
                   }}
                 />
               </div>
