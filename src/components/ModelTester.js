@@ -89,14 +89,17 @@ export default function ModelTester({ onBack }) {
             const data = await res.json();
             
             if (data.success === false) {
-              result = { error: data.error || "حدث خطأ أثناء معالجة الصورة.", timeTaken };
+              result = { error: data.error || data.message || "حدث خطأ أثناء معالجة الصورة.", timeTaken };
             } else {
                 const label = data.disease || "غير معروف";
                 const confidence = typeof data.confidence === 'number' ? data.confidence / 100 : 0;
+                const certainty = typeof data.certainty === 'number' ? data.certainty / 100 : confidence;
                 
                 result = { 
                   label, 
                   confidence, 
+                  certainty,
+                  tier: data.tier || "low",
                   type: data.type || "plant",
                   message: data.message || "",
                   timeTaken
@@ -249,11 +252,30 @@ export default function ModelTester({ onBack }) {
                         {results.model2.type === "non_plant" ? results.model2.label : formatLabel(results.model2.label)}
                       </div>
 
-                      <div style={{ color: G.muted, fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, marginBottom: results.model2.message ? 12 : 0 }}>
-                        نسبة الثقة: 
-                        <span style={{ color: results.model2.type === "non_plant" ? G.amber : G.greenBright, fontWeight: 'bold' }}>
-                          {(results.model2.confidence * 100).toFixed(1)}%
-                        </span>
+                      <div style={{ color: G.muted, fontSize: 13, display: 'flex', flexDirection: 'column', gap: 6, marginBottom: results.model2.message ? 12 : 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          نسبة الثقة (الخام): 
+                          <span style={{ color: G.text, fontWeight: 'bold' }}>
+                            {(results.model2.confidence * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                        {results.model2.certainty !== undefined && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            اليقين الذكي: 
+                            <span style={{ color: results.model2.type === "non_plant" ? G.amber : G.greenBright, fontWeight: 'bold' }}>
+                              {(results.model2.certainty * 100).toFixed(1)}%
+                            </span>
+                            {results.model2.tier && (
+                              <span style={{ 
+                                background: results.model2.tier.toLowerCase() === 'high' ? 'rgba(22,163,74,0.2)' : results.model2.tier.toLowerCase() === 'medium' ? 'rgba(245,158,11,0.2)' : 'rgba(220,38,38,0.2)',
+                                color: results.model2.tier.toLowerCase() === 'high' ? '#4ade80' : results.model2.tier.toLowerCase() === 'medium' ? '#fcd34d' : '#f87171',
+                                padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 'bold', marginLeft: 'auto'
+                              }}>
+                                {results.model2.tier.toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {results.model2.message && (

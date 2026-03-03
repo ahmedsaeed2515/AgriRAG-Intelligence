@@ -76,6 +76,8 @@ export function useChat() {
           let confidence = 0;
           let type = "plant";
           let message = "";
+          let certainty = 0;
+          let tier = "low";
 
           const visionRes = await fetch(VISION_NEW_URL, {
             method: "POST",
@@ -89,18 +91,20 @@ export function useChat() {
             const visionData = await visionRes.json();
             
             if (visionData.success === false) {
-              throw new Error(visionData.error || "حدث خطأ أثناء معالجة الصورة.");
+              throw new Error(visionData.error || visionData.message || "حدث خطأ أثناء معالجة الصورة.");
             }
 
             label = visionData.disease || "";
             confidence = typeof visionData.confidence === 'number' ? visionData.confidence / 100 : 0;
+            certainty = typeof visionData.certainty === 'number' ? visionData.certainty / 100 : confidence;
+            tier = visionData.tier || "low";
             type = visionData.type || "plant";
             message = visionData.message || "";
           }
 
           setMessages((prev) => [
             ...prev.filter((m) => m.role !== "typing"),
-            { role: "diagnosis", label, confidence, type, message },
+            { role: "diagnosis", label, confidence, certainty, tier, type, message },
           ]);
 
           const ragQuestion = type === "non_plant" 

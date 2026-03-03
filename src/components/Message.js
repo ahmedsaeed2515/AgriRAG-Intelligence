@@ -199,18 +199,49 @@ export default function Message({ msg, isLast, onRegenerate }) {
                 </div>
               )}
               <div style={styles.diagnosisConf}>
-                <div style={{ ...styles.confBar, background: "rgba(245,158,11,0.2)" }}>
-                  <div
-                    style={{
-                      ...styles.confFill,
-                      background: "#f59e0b",
-                      width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
-                    }}
-                  />
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <div style={{ ...styles.confBar, background: "rgba(245,158,11,0.2)", flex: 1 }}>
+                      <div
+                        style={{
+                          ...styles.confFill,
+                          background: "#f59e0b",
+                          width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
+                        }}
+                      />
+                    </div>
+                    <span style={{ ...styles.confText, color: "#fde68a" }}>
+                      {(msg.confidence * 100).toFixed(1)}% ثقة (الخام)
+                    </span>
+                  </div>
+                  
+                  {msg.certainty !== undefined && (
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                      <div style={{ ...styles.confBar, background: "rgba(245,158,11,0.2)", flex: 1 }}>
+                        <div
+                          style={{
+                            ...styles.confFill,
+                            background: "#f59e0b",
+                            width: `${Math.min(msg.certainty * 100, 100).toFixed(0)}%`,
+                          }}
+                        />
+                      </div>
+                      <span style={{ ...styles.confText, color: "#fde68a", fontWeight: 'bold' }}>
+                        {(msg.certainty * 100).toFixed(1)}% يقين
+                      </span>
+                      {msg.tier && (
+                        <span style={{ 
+                          fontSize: 10, marginLeft: 6, fontWeight: 'bold',
+                          color: msg.tier.toLowerCase() === 'high' ? '#4ade80' : msg.tier.toLowerCase() === 'medium' ? '#fcd34d' : '#f87171', 
+                          background: msg.tier.toLowerCase() === 'high' ? 'rgba(22,163,74,0.2)' : msg.tier.toLowerCase() === 'medium' ? 'rgba(245,158,11,0.2)' : 'rgba(220,38,38,0.2)',
+                          padding: '2px 6px', borderRadius: 4 
+                        }}>
+                          {msg.tier.toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <span style={{ ...styles.confText, color: "#fde68a" }}>
-                  {(msg.confidence * 100).toFixed(1)}% ثقة
-                </span>
               </div>
             </div>
           </div>
@@ -231,17 +262,48 @@ export default function Message({ msg, isLast, onRegenerate }) {
               </div>
             )}
             <div style={styles.diagnosisConf}>
-              <div style={{ ...styles.confBar }}>
-                <div
-                  style={{
-                    ...styles.confFill,
-                    width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
-                  }}
-                />
-              </div>
-              <span style={styles.confText}>
-                {(msg.confidence * 100).toFixed(1)}% ثقة
-              </span>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 6 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                    <div style={{ ...styles.confBar, flex: 1 }}>
+                      <div
+                        style={{
+                          ...styles.confFill,
+                          width: `${Math.min(msg.confidence * 100, 100).toFixed(0)}%`,
+                        }}
+                      />
+                    </div>
+                    <span style={styles.confText}>
+                      {(msg.confidence * 100).toFixed(1)}% ثقة (الخام)
+                    </span>
+                  </div>
+
+                  {msg.certainty !== undefined && (
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                      <div style={{ ...styles.confBar, flex: 1 }}>
+                        <div
+                          style={{
+                            ...styles.confFill,
+                            background: "#4ade80",
+                            width: `${Math.min(msg.certainty * 100, 100).toFixed(0)}%`,
+                          }}
+                        />
+                      </div>
+                      <span style={{ ...styles.confText, fontWeight: 'bold' }}>
+                        {(msg.certainty * 100).toFixed(1)}% يقين
+                      </span>
+                      {msg.tier && (
+                        <span style={{ 
+                          fontSize: 10, marginLeft: 6, fontWeight: 'bold',
+                          color: msg.tier.toLowerCase() === 'high' ? '#4ade80' : msg.tier.toLowerCase() === 'medium' ? '#fcd34d' : '#f87171', 
+                          background: msg.tier.toLowerCase() === 'high' ? 'rgba(22,163,74,0.2)' : msg.tier.toLowerCase() === 'medium' ? 'rgba(245,158,11,0.2)' : 'rgba(220,38,38,0.2)',
+                          padding: '2px 6px', borderRadius: 4 
+                        }}>
+                          {msg.tier.toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
             </div>
           </div>
         </div>
